@@ -35,6 +35,8 @@ powershell.exe -Command Import-PfxCertificate -FilePath C:\\temp\\sfctl\\certs\\
 
 RDP to your nodes and run the following (remember, 1709 is Server Core!)
 
+SMB global mappings don't appear to persist between restarts, so you'll want to automate this for sure
+
 ```powershell
 powershell
 

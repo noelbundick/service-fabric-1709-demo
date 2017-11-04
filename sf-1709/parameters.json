@@ -1,0 +1,27 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterName": {
+      "value": "sf-1709"
+    },
+    "nodeTypeSize": {
+      "value": "Standard_E2s_V3"
+    },
+    "adminUsername": {
+      "value": "azureadmin"
+    },
+    "adminPassword": {
+      "value": "Password#1234"
+    },
+    "certificateThumbprint": {
+      "value": "D8ABB55ABA1F1C7953220FC8077822E32F82245D"
+    },
+    "sourceVaultValue": {
+      "value": "/subscriptions/6c1f4f3b-f65f-4667-8f9e-b9c48e09cd6b/resourceGroups/sf-1709/providers/Microsoft.KeyVault/vaults/sf-1709"
+    },
+    "certificateUrlValue": {
+      "value": "https://sf-1709.vault.azure.net/secrets/sf-1709"
+    }
+  }
+}

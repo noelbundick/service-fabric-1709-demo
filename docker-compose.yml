@@ -1,5 +1,3 @@
-# Turns out this doesn't work because Docker Compose v3 doesn't
-# support 'isolation' and we only have a 2016-based image currently
 version: '3'
 services:
   minecraft:
@@ -10,3 +8,7 @@ services:
     environment:
       EULA: TRUE
     isolation: hyperv
+    deploy:
+      resources:
+        limits:
+          memory: 1536M

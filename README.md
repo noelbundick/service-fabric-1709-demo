@@ -47,22 +47,21 @@ New-SmbGlobalMapping -RemotePath "\\<storage_account_name>.file.core.windows.net
 
 ### TODO: automated setup using a VM extension / etc/
 
-## Deploy Minecraft
-
-Deploy the `minecraft2016` project from Visual Studio 2017
-
-### TODO: Use VS Code & sfctl instead of full VS
+### Option 1 - Deploy Minecraft via Compose
 
 ```bash
 # Convert to pem. No password cause I'm lazy
 openssl pkcs12 -in sf-1709.pfx -out sf-1709.pem -nodes
 
-# connect to cluster
+# Select the cluster
 sfctl cluster select --endpoint https://sf-1709.westus2.cloudapp.azure.com:19080/Explorer --pem certs/sf-1709.pem --no-verify
 
-# Compose doesn't work because 2016 containers need to be run in hyperv isolation mode
-#sfctl compose create --deployment-name minecraft2016 --file-path docker-compose.yml
-# deploy the minecraft2016 VS project instead
+# Deploy minecraft to the cluster via 
+sfctl compose create --deployment-name minecraft2016 --file-path docker-compose.yml
 ```
 
-### TODO: Port noelbundick/minecraft-server:nanoserver to 1709
+## Option 2 - Deploy Minecraft via Visual Studio 2017
+
+Deploy the `minecraft2016` project from Visual Studio 2017
+
+## TODO: Port noelbundick/minecraft-server:nanoserver to 1709

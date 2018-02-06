@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ServiceManifest Name="minecraft2016hypervPkg"
+<ServiceManifest Name="minecraftPkg"
                  Version="1.0.0"
                  xmlns="http://schemas.microsoft.com/2011/01/fabric"
                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -7,7 +7,7 @@
   <ServiceTypes>
     <!-- This is the name of your ServiceType.
          The UseImplicitHost attribute indicates this is a guest service. -->
-    <StatelessServiceType ServiceTypeName="minecraft2016hypervType" UseImplicitHost="true" />
+    <StatelessServiceType ServiceTypeName="minecraftType" UseImplicitHost="true" />
   </ServiceTypes>
 
   <!-- Code package is your service executable. -->
@@ -16,6 +16,7 @@
       <ExeHost>
         <Program>setup.bat</Program>
         <WorkingFolder>CodePackage</WorkingFolder>
+        <ConsoleRedirection FileRetentionCount="5" FileMaxSizeInKb="2048"/>
       </ExeHost>
     </SetupEntryPoint>
     <EntryPoint>
@@ -27,7 +28,11 @@
     <!-- Pass environment variables to your container: -->
     
     <EnvironmentVariables>
-      <EnvironmentVariable Name="EULA" Value="TRUE"/>
+      <EnvironmentVariable Name="EULA" Value="TRUE" />
+      <EnvironmentVariable Name="minecraft_storageAccountName" Value="" />
+      <EnvironmentVariable Name="minecraft_storageAccountKey" Value="" />
+      <EnvironmentVariable Name="minecraft_storageAccountShare" Value="" />
+      <EnvironmentVariable Name="minecraft_worldFolder" Value="" />
     </EnvironmentVariables>
     
   </CodePackage>
@@ -41,8 +46,8 @@
       <!-- This endpoint is used by the communication listener to obtain the port on which to 
            listen. Please note that if your service is partitioned, this port is shared with 
            replicas of different partitions that are placed in your code. -->
-      <Endpoint Name="minecraft2016hypervTypeEndpoint" Port="25565" />
-      <Endpoint Name="minecraft2016hypervTypeEndpointrcon" Port="25575" />
+      <Endpoint Name="minecraftEndpoint" Protocol="tcp" />
+      <Endpoint Name="minecraftRCONEndpoint" Protocol="tcp" />
     </Endpoints>
   </Resources>
 </ServiceManifest>

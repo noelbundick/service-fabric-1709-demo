@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ApplicationPackageRoot\ApplicationManifest.xml" />
-    <None Include="ApplicationPackageRoot\minecraft2016hypervPkg\Code\AddSMBGlobalMapping.ps1">
+    <None Include="ApplicationPackageRoot\minecraftPkg\Code\AddSMBGlobalMapping.ps1">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="ApplicationParameters\Cloud.xml" />
@@ -32,11 +32,11 @@
     <None Include="Scripts\Deploy-FabricApplication.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ApplicationPackageRoot\minecraft2016hypervPkg\Config\Settings.xml" />
-    <Content Include="ApplicationPackageRoot\minecraft2016hypervPkg\Code\setup.bat">
+    <Content Include="ApplicationPackageRoot\minecraftPkg\Config\Settings.xml" />
+    <Content Include="ApplicationPackageRoot\minecraftPkg\Code\setup.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ApplicationPackageRoot\minecraft2016hypervPkg\ServiceManifest.xml" />
+    <Content Include="ApplicationPackageRoot\minecraftPkg\ServiceManifest.xml" />
     <Content Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />

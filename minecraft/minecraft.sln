@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27019.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "minecraft2016", "minecraft2016\minecraft2016.sfproj", "{812FC16B-71CF-4B7A-B452-4EC006FA97F3}"
+Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "minecraft", "minecraft\minecraft.sfproj", "{812FC16B-71CF-4B7A-B452-4EC006FA97F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -51,11 +51,11 @@ openssl pkcs12 -in sf-1709.pfx -out sf-1709.pem -nodes
 sfctl cluster select --endpoint https://sf-1709.westus2.cloudapp.azure.com:19080/Explorer --pem certs/sf-1709.pem --no-verify
 
 # Deploy minecraft to the cluster via 
-sfctl compose create --deployment-name minecraft2016 --file-path docker-compose.yml
+sfctl compose create --deployment-name minecraft --file-path docker-compose.yml
 ```
 
 ## Option 2 - Deploy Minecraft via Visual Studio 2017
 
-Deploy the `minecraft2016` project from Visual Studio 2017
+Deploy the `minecraft` project from Visual Studio 2017
 
 ## TODO: Port noelbundick/minecraft-server:nanoserver to 1709

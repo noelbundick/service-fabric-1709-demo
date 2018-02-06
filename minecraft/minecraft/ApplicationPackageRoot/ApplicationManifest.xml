@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ApplicationManifest ApplicationTypeName="minecraft"
+                     ApplicationTypeVersion="1.0.0"
+                     xmlns="http://schemas.microsoft.com/2011/01/fabric"
+                     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Parameters>
+    <Parameter Name="StorageAccountName" DefaultValue="" />
+    <Parameter Name="StorageAccountKey" DefaultValue="" />
+    <Parameter Name="StorageAccountShare" DefaultValue="" />
+    <Parameter Name="WorldFolder" DefaultValue="Z:\minecraft" />
+    <Parameter Name="MinecraftPort" DefaultValue="25565" />
+    <Parameter Name="MinecraftRCONPort" DefaultValue="25575" />
+
+  </Parameters>
+  <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
+       should match the Name and Version attributes of the ServiceManifest element defined in the 
+       ServiceManifest.xml file. -->
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="minecraftPkg" ServiceManifestVersion="1.0.0" />
+    <ResourceOverrides>
+      <Endpoints>
+        <Endpoint Name="minecraftEndpoint" Port="[MinecraftPort]" />
+        <Endpoint Name="minecraftRCONEndpoint" Port="[MinecraftRCONPort]" />
+      </Endpoints>
+    </ResourceOverrides>
+    <EnvironmentOverrides CodePackageRef="Code">
+      <EnvironmentVariable Name="minecraft_storageAccountName" Value="[StorageAccountName]"/>
+      <EnvironmentVariable Name="minecraft_storageAccountKey" Value="[StorageAccountKey]"/>
+      <EnvironmentVariable Name="minecraft_storageAccountShare" Value="[StorageAccountShare]"/>
+      <EnvironmentVariable Name="minecraft_worldFolder" Value="[WorldFolder]"/>
+    </EnvironmentOverrides>
+    <Policies>
+      <ContainerHostPolicies CodePackageRef="Code">
+        <PortBinding ContainerPort="25565" EndpointRef="minecraftEndpoint" />
+        <PortBinding ContainerPort="25575" EndpointRef="minecraftRCONEndpoint" />
+        <Volume Source="[WorldFolder]" Destination="C:\data" IsReadOnly="false" />
+      </ContainerHostPolicies>
+      <RunAsPolicy CodePackageRef="Code" UserRef="SetupAdminUser" EntryPointType="Setup" />
+    </Policies>
+  </ServiceManifestImport>
+  <DefaultServices>
+    <!-- The section below creates instances of service types, when an instance of this 
+         application type is created. You can also create one or more instances of service type using the 
+         ServiceFabric PowerShell module.
+         
+         The attribute ServiceTypeName below must match the name defined in the imported ServiceManifest.xml file. -->
+    <Service Name="DefaultMinecraftInstance" ServicePackageActivationMode="ExclusiveProcess">
+      <StatelessService ServiceTypeName="minecraftType" InstanceCount="1">
+        <SingletonPartition />
+      </StatelessService>
+    </Service>
+  </DefaultServices>
+  <Principals>
+    <Users>
+      <User Name="SetupAdminUser">
+        <MemberOf>
+          <SystemGroup Name="Administrators"/>
+        </MemberOf>
+      </User>
+    </Users>
+  </Principals>
+</ApplicationManifest>

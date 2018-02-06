@@ -14,14 +14,12 @@
     <ServiceManifestRef ServiceManifestName="minecraft2016hypervPkg" ServiceManifestVersion="1.0.0" />
     <ConfigOverrides />
     <Policies>
-      <ContainerHostPolicies CodePackageRef="Code" Isolation="hyperv">
+      <ContainerHostPolicies CodePackageRef="Code">
         <PortBinding ContainerPort="25565" EndpointRef="minecraft2016hypervTypeEndpoint" />
         <PortBinding ContainerPort="25575" EndpointRef="minecraft2016hypervTypeEndpointrcon" />
-        <!--Works to local folder on C-->
-        <!--<Volume Source="C:\minecraft" Destination="C:\data" IsReadOnly="false" />-->
         <Volume Source="Z:\minecraft" Destination="C:\data" IsReadOnly="false" />
       </ContainerHostPolicies>
-      <ResourceGovernancePolicy CodePackageRef="Code" MemoryInMB="1536"/>
+      <RunAsPolicy CodePackageRef="Code" UserRef="SetupAdminUser" EntryPointType="Setup" />
     </Policies>
   </ServiceManifestImport>
   <DefaultServices>
@@ -36,4 +34,13 @@
       </StatelessService>
     </Service>
   </DefaultServices>
+  <Principals>
+    <Users>
+      <User Name="SetupAdminUser">
+        <MemberOf>
+          <SystemGroup Name="Administrators"/>
+        </MemberOf>
+      </User>
+    </Users>
+  </Principals>
 </ApplicationManifest>

@@ -3,25 +3,67 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "clusterName": {
-      "value": "sf-1709"
+      "value": "sf-1709c"
     },
-    "nodeTypeSize": {
-      "value": "Standard_E2s_V3"
-    },
-    "adminUsername": {
-      "value": "azureadmin"
+    "adminUserName": {
+      "value": "adminuser"
     },
     "adminPassword": {
       "value": "Password#1234"
     },
+    "vmImagePublisher": {
+      "value": "MicrosoftWindowsServer"
+    },
+    "vmSku": {
+      "value": "Standard_E2S_v3"
+    },
+    "vmImageOffer": {
+      "value": "WindowsServerSemiAnnual"
+    },
+    "vmImageSku": {
+      "value": "Datacenter-Core-1709-with-Containers-smalldisk"
+    },
+    "vmImageVersion": {
+      "value": "latest"
+    },
+    "loadBalancedAppPort1": {
+      "value": 25565
+    },
+    "loadBalancedAppPort2": {
+      "value": 25575
+    },
+    "certificateStoreValue": {
+      "value": "My"
+    },
     "certificateThumbprint": {
-      "value": "D8ABB55ABA1F1C7953220FC8077822E32F82245D"
+      "value": ""
     },
     "sourceVaultValue": {
-      "value": "/subscriptions/6c1f4f3b-f65f-4667-8f9e-b9c48e09cd6b/resourceGroups/sf-1709/providers/Microsoft.KeyVault/vaults/sf-1709"
+      "value": ""
     },
     "certificateUrlValue": {
-      "value": "https://sf-1709.vault.azure.net/secrets/sf-1709"
+      "value": ""
+    },
+    "clusterProtectionLevel": {
+      "value": "EncryptAndSign"
+    },
+    "storageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "supportLogStorageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "applicationDiagnosticsStorageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "nt0InstanceCount": {
+      "value": 5
+    },
+    "durabilityLevel": {
+      "value": "Bronze"
+    },
+    "reliabilityLevel": {
+      "value": "Silver"
     }
   }
 }

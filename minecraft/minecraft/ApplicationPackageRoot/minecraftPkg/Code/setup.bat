@@ -1,12 +1,13 @@
 @echo off
 
-rem TODO: clean up
+REM TIP: It can be useful to dump all arguments/environment variables during debugging
+REM TIP: Make sure you enable ConsoleRedirection in ServiceManifest.xml
 
-rem dump all parameters
-echo %*
+REM TIP: List all arguments
+REM echo %*
 
-rem dump all environment vars
-set
+REM TIP: List all environment variables
+REM set
 
-rem use PS for the real work
+REM We'll use PowerShell to create the SMB Global Mappings
 powershell.exe -ExecutionPolicy Bypass -Command ".\AddSMBGlobalMapping.ps1"

@@ -5,47 +5,49 @@
                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ServiceTypes>
-    <!-- This is the name of your ServiceType.
-         The UseImplicitHost attribute indicates this is a guest service. -->
-    <StatelessServiceType ServiceTypeName="minecraftType" UseImplicitHost="true" />
+    <StatelessServiceType ServiceTypeName="minecraftType" UseImplicitHost="true">
+      <!-- TIP: Pinning the service to a specific node can be useful for debugging -->
+      <!--<PlacementConstraints>(NodeName==_nt1vm_0)</PlacementConstraints>-->
+    </StatelessServiceType>
   </ServiceTypes>
 
-  <!-- Code package is your service executable. -->
   <CodePackage Name="Code" Version="1.0.0">
+
+    <!-- We need to do some setup on the node before the container starts to set up SMB global mappings -->
     <SetupEntryPoint>
       <ExeHost>
         <Program>setup.bat</Program>
         <WorkingFolder>CodePackage</WorkingFolder>
-        <ConsoleRedirection FileRetentionCount="5" FileMaxSizeInKb="2048"/>
+        <!-- TIP: Console redirection is essential for capturing stdout/stderr during development -->
+        <!-- TIP: These logs will be located in D:\SvcFab\_App\{instance}\logs by default -->
+        <!--<ConsoleRedirection FileRetentionCount="5" FileMaxSizeInKb="2048"/>-->
       </ExeHost>
     </SetupEntryPoint>
+    
     <EntryPoint>
-      <!-- Follow this link for more information about deploying Windows containers to Service Fabric: https://aka.ms/sfguestcontainers -->
+      <!-- TIP: Don't forget to set isolation="hyperv" in ContainerHostPolicies inside ApplicationManifest.xml if you're running 2016 containers on a 1709 host -->
       <ContainerHost>
         <ImageName>acanthamoeba/minecraft-server:nanoserver-1709</ImageName>
       </ContainerHost>
     </EntryPoint>
-    <!-- Pass environment variables to your container: -->
     
     <EnvironmentVariables>
+      <!-- TIP: This environment var is always required, so we set it here -->
       <EnvironmentVariable Name="EULA" Value="TRUE" />
-      <EnvironmentVariable Name="minecraft_storageAccountName" Value="" />
-      <EnvironmentVariable Name="minecraft_storageAccountKey" Value="" />
-      <EnvironmentVariable Name="minecraft_storageAccountShare" Value="" />
-      <EnvironmentVariable Name="minecraft_worldFolder" Value="" />
+      
+      <!-- TIP: These are used as placeholders and should be overridden in ApplicationManifest.xml -->
+      <EnvironmentVariable Name="container_storageAccountName" Value="" />
+      <EnvironmentVariable Name="container_storageAccountKey" Value="" />
+      <EnvironmentVariable Name="container_storageAccountShare" Value="" />
+      <EnvironmentVariable Name="container_dataFolder" Value="" />
     </EnvironmentVariables>
     
   </CodePackage>
 
-  <!-- Config package is the contents of the Config directoy under PackageRoot that contains an 
-       independently-updateable and versioned set of custom configuration settings for your service. -->
-  <ConfigPackage Name="Config" Version="1.0.0" />
-
   <Resources>
     <Endpoints>
-      <!-- This endpoint is used by the communication listener to obtain the port on which to 
-           listen. Please note that if your service is partitioned, this port is shared with 
-           replicas of different partitions that are placed in your code. -->
+      <!-- TIP: We'll define that 2 ports are exposed for this container, but let Service Fabric auto-assign port numbers but default -->
+      <!-- TIP: The port numbers will be explicitly set in ResourceOverrides inside ApplicationManifest.xml -->
       <Endpoint Name="minecraftEndpoint" Protocol="tcp" />
       <Endpoint Name="minecraftRCONEndpoint" Protocol="tcp" />
     </Endpoints>

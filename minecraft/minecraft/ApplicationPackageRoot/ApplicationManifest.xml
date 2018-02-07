@@ -31,6 +31,7 @@
       <EnvironmentVariable Name="minecraft_worldFolder" Value="[WorldFolder]"/>
     </EnvironmentOverrides>
     <Policies>
+      <ResourceGovernancePolicy CodePackageRef="Code" MemoryInMB="1536" />
       <ContainerHostPolicies CodePackageRef="Code">
         <PortBinding ContainerPort="25565" EndpointRef="minecraftEndpoint" />
         <PortBinding ContainerPort="25575" EndpointRef="minecraftRCONEndpoint" />

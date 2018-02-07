@@ -4,6 +4,6 @@
     <Parameter Name="StorageAccountName" Value="sf1709cdata" />
     <Parameter Name="StorageAccountKey" Value="DqtY62yKO6UpJv7G3ibj5tLcTaqnSYheHbcK+oEva93LNACtsCONBY4b+xdOVbVLlradkX0UlqIiruHblPN/5w==" />
     <Parameter Name="StorageAccountShare" Value="minecraft" />
-    <Parameter Name="WorldFolder" Value="Z:\minecraft" />
+    <Parameter Name="WorldFolder" Value="Z:\world3" />
   </Parameters>
 </Application>

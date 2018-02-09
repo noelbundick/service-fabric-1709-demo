@@ -1,7 +1,7 @@
 version: '3'
 services:
   minecraft:
-    image: openhack/minecraft-server:2.0
+    image: acanthamoeba/minecraft-server:nanoserver-1709
     ports:
       - 25565:25565
       - 25575:25575

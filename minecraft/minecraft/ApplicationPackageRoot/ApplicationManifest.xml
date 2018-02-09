@@ -42,13 +42,15 @@
     </EnvironmentOverrides>
     
     <Policies>
+
+      <!-- This is where we tell SF how much CPU to give to the container -->
+      <ServicePackageResourceGovernancePolicy CpuCores="1" />
       
       <!-- This is where we tell SF how much memory to give to the container -->
       <ResourceGovernancePolicy CodePackageRef="Code" MemoryInMB="1536" />
       
-      <!-- TIP: Swap these out to run as a Hyper-V container, which allows you to run 2016-based containers on a 1709 host -->
-      <!-- TIP: Make sure to set MemoryInMB in ResourceGovernancePolicy if using a Hyper-V container -->
-      <!--<ContainerHostPolicies CodePackageRef="Code">-->
+      <!-- TIP: You can use Hyper-V containers to avoid some Java problems, since its container awareness on Windows is limited -->
+      <!-- TIP: Hyper-V containers also allow you to run 2016-based images on a 1709 host -->
       <ContainerHostPolicies CodePackageRef="Code" Isolation="hyperv">
         
         <!-- This is where we map from VM port -> container port. The VM ports are determined by SF endpoints (and specifically set above in ResourceOverrides) -->
@@ -64,6 +66,7 @@
       
       <!-- This is where we tell Service Fabric to run our SetupEntryPoint (startup script) as our admin user created in Principals below -->
       <RunAsPolicy CodePackageRef="Code" UserRef="SetupAdminUser" EntryPointType="Setup" />
+      
     </Policies>
     
   </ServiceManifestImport>

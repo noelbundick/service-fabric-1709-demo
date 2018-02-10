@@ -13,20 +13,22 @@
 
 ### Set up a cluster
 
+Run the following commands in PowerShell, replacing the cert path with your own
+
 ```powershell
 # Create a cluster
-az sf cluster create \
-  -g sf-1709 \
-  -l eastus \
-  --template-file sf-1709/template.json \
-  --parameter-file sf-1709/parameters.json \
-  --vault-name sf-1709 \
-  --certificate-subject-name sf-1709 \
-  --certificate-password 'Password#1234' \
+az sf cluster create `
+  -g sf-1709 `
+  -l eastus `
+  --template-file sf-1709/template.json `
+  --parameter-file sf-1709/parameters.json `
+  --vault-name sf-1709 `
+  --certificate-subject-name sf-1709 `
+  --certificate-password 'Password#1234' `
   --certificate-output-folder .
 
 # Import cert
-Import-PfxCertificate -FilePath 'C:\code\noelbundick\service-fabric-1709-demo\sf-1709201802051346.pfx' -CertStoreLocation 'Cert:\CurrentUser\My\'
+Import-PfxCertificate -FilePath '.\sf-1709201802051346.pfx' -CertStoreLocation 'Cert:\CurrentUser\My\'
 ```
 
 ### [Create an Azure File share](https://docs.microsoft.com/en-us/azure/storage/files/storage-how-to-create-file-share)

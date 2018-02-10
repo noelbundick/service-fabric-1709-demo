@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "clusterName": {
-      "value": "sf-1709c"
+      "value": "sf-1709"
     },
     "adminUserName": {
       "value": "adminuser"

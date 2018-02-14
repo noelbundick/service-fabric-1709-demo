@@ -9,7 +9,7 @@
     
     <!-- These variables MUST be unique between instances of SQL Server -->
     <!-- We need unique ports, otherwise the load balancer will split traffic across different instances, and users will hit a different app each time they log on -->
-    <Parameter Name="mssqlPort" DefaultValue="25565" />
+    <Parameter Name="mssqlPort" DefaultValue="1433" />
     <!-- We need a unique data folder, because multiple instances of SQL Server can't read/write to the same files on disk -->
     <Parameter Name="DataFolder" DefaultValue="D:\smbmappings\{storageAccount}-{shareName}\mssql" />
     

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application Name="fabric:/mssql" xmlns="http://schemas.microsoft.com/2011/01/fabric" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Parameters>
+    <Parameter Name="StorageAccountName" Value="sf1709data" />
+    <Parameter Name="StorageAccountKey" Value="DqtY62yKO6UpJv7G3ibj5tLcTaqnSYheHbcK+oEva93LNACtsCONBY4b+xdOVbVLlradkX0UlqIiruHblPN/5w==" />
+    <Parameter Name="StorageAccountShare" Value="sqlserver" />
+    <!-- The format used by AddSMBGlobalMappings.ps1 is: "D:\smbmappings\{storageAccount}-{shareName}\mssql" -->
+    <Parameter Name="DataFolder" Value="D:\smbmappings\sf1709data-sqlserver\server1" />
+  </Parameters>
+</Application>

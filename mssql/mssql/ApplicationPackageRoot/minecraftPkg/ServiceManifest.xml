@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceManifest Name="mssqlPkg"
+                 Version="1.0.0"
+                 xmlns="http://schemas.microsoft.com/2011/01/fabric"
+                 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ServiceTypes>
+    <StatelessServiceType ServiceTypeName="mssqlType" UseImplicitHost="true">
+      <!-- TIP: Pinning the service to a specific node can be useful for debugging -->
+      <!--<PlacementConstraints>(NodeName==_nt1vm_0)</PlacementConstraints>-->
+    </StatelessServiceType>
+  </ServiceTypes>
+
+  <CodePackage Name="Code" Version="1.0.0">
+
+    <!-- We need to do some setup on the node before the container starts to set up SMB global mappings -->
+    <SetupEntryPoint>
+      <ExeHost>
+        <Program>setup.bat</Program>
+        <WorkingFolder>CodePackage</WorkingFolder>
+        <!-- TIP: Console redirection is essential for capturing stdout/stderr during development -->
+        <!-- TIP: These logs will be located in D:\SvcFab\_App\{instance}\logs by default -->
+        <!--<ConsoleRedirection FileRetentionCount="5" FileMaxSizeInKb="2048"/>-->
+      </ExeHost>
+    </SetupEntryPoint>
+    
+    <EntryPoint>
+      <!-- TIP: Don't forget to set isolation="hyperv" in ContainerHostPolicies inside ApplicationManifest.xml if you're running 2016 containers on a 1709 host -->
+      <ContainerHost>
+        <!-- I'm using a custom derivative of the microsoft/mssql-server-windows-developer:1709 here that enables me to map the data folder as a volume -->
+        <ImageName>acanthamoeba/mssql-server-windows-developer:1709</ImageName>
+      </ContainerHost>
+    </EntryPoint>
+    
+    <EnvironmentVariables>
+      <!-- TIP: These environment vars are always required, so we set them here -->
+      <EnvironmentVariable Name="ACCEPT_EULA" Value="Y" />
+      <EnvironmentVariable Name="sa_password" Value="Password#1234" />
+      
+      <!-- TIP: These are used as placeholders and should be overridden in ApplicationManifest.xml -->
+      <EnvironmentVariable Name="container_storageAccountName" Value="" />
+      <EnvironmentVariable Name="container_storageAccountKey" Value="" />
+      <EnvironmentVariable Name="container_storageAccountShare" Value="" />
+      <EnvironmentVariable Name="container_dataFolder" Value="" />
+    </EnvironmentVariables>
+    
+  </CodePackage>
+
+  <Resources>
+    <Endpoints>
+      <!-- TIP: We'll define a port that is exposed for this container, but let Service Fabric auto-assign port numbers by default -->
+      <!-- TIP: The port numbers will be explicitly set in ResourceOverrides inside ApplicationManifest.xml -->
+      <Endpoint Name="mssqlEndpoint" Protocol="tcp" />
+    </Endpoints>
+  </Resources>
+</ServiceManifest>

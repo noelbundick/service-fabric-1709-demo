@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ApplicationManifest ApplicationTypeName="mssql"
+                     ApplicationTypeVersion="1.0.0"
+                     xmlns="http://schemas.microsoft.com/2011/01/fabric"
+                     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  
+  <Parameters>
+    
+    <!-- These variables MUST be unique between instances of SQL Server -->
+    <!-- We need unique ports, otherwise the load balancer will split traffic across different instances, and users will hit a different app each time they log on -->
+    <Parameter Name="mssqlPort" DefaultValue="25565" />
+    <!-- We need a unique data folder, because multiple instances of SQL Server can't read/write to the same files on disk -->
+    <Parameter Name="DataFolder" DefaultValue="D:\smbmappings\{storageAccount}-{shareName}\mssql" />
+    
+    <!-- These variables are required to store data on Azure Files, but they may be the same for many SQL Server instances. -->
+    <!-- Ex: to store many SQL Server instances in different folders under a single file share -->
+    <Parameter Name="StorageAccountName" DefaultValue="" />
+    <Parameter Name="StorageAccountKey" DefaultValue="" />
+    <Parameter Name="StorageAccountShare" DefaultValue="" />
+    
+  </Parameters>
+  
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="mssqlPkg" ServiceManifestVersion="1.0.0" />
+
+    <!-- This is where we set the ports that will be exposed on the VM (and should be configured on a load balancer) -->
+    <ResourceOverrides>
+      <Endpoints>
+        <Endpoint Name="mssqlEndpoint" Port="[mssqlPort]" />
+      </Endpoints>
+    </ResourceOverrides>
+    
+    <!-- This is where we set the environment vars for our container and setup script-->
+    <EnvironmentOverrides CodePackageRef="Code">
+      <EnvironmentVariable Name="container_storageAccountName" Value="[StorageAccountName]"/>
+      <EnvironmentVariable Name="container_storageAccountKey" Value="[StorageAccountKey]"/>
+      <EnvironmentVariable Name="container_storageAccountShare" Value="[StorageAccountShare]"/>
+      <EnvironmentVariable Name="container_DataFolder" Value="[DataFolder]"/>
+    </EnvironmentOverrides>
+    
+    <Policies>
+
+      <!-- This is where we tell SF how much CPU to give to the container -->
+      <ServicePackageResourceGovernancePolicy CpuCores="1" />
+      
+      <!-- This is where we tell SF how much memory to give to the container -->
+      <ResourceGovernancePolicy CodePackageRef="Code" MemoryInMB="4096" />
+      
+      <ContainerHostPolicies CodePackageRef="Code">
+        
+        <!-- This is where we map from VM port -> container port. The VM ports are determined by SF endpoints (and specifically set above in ResourceOverrides) -->
+        <!-- TIP: This translates to the '-p [host_port]:1433' you may be familiar with in 'docker run' -->
+        <PortBinding ContainerPort="1433" EndpointRef="mssqlEndpoint" />
+        
+        <!-- This is where we map the data folder inside the container to D:\smbmappings\{storageAccount}-{shareName}\{dataFolder} (which is a symlink to \\{storageAccount}.file.core.windows.net\{shareName}\{dataFolder}) -->
+        <!-- TIP: This translates to the '-v D:\smbmappings\{storageAccount}-{shareName}\{dataFolder}:C:\data' you may be familiar with in 'docker run' -->
+        <Volume Source="[DataFolder]" Destination="C:\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQL\DATA" IsReadOnly="false" />
+        
+      </ContainerHostPolicies>
+      
+      <!-- This is where we tell Service Fabric to run our SetupEntryPoint (startup script) as our admin user created in Principals below -->
+      <RunAsPolicy CodePackageRef="Code" UserRef="SetupAdminUser" EntryPointType="Setup" />
+      
+    </Policies>
+    
+  </ServiceManifestImport>
+  
+  <DefaultServices>
+    <Service Name="DefaultmssqlInstance" ServicePackageActivationMode="ExclusiveProcess">
+      <!-- mssql isn't cluster-aware, so we should only ever have one running instance for a given logical database instance -->
+      <StatelessService ServiceTypeName="mssqlType" InstanceCount="1">
+        <SingletonPartition />
+      </StatelessService>
+    </Service>
+  </DefaultServices>
+  
+  <!-- We need to run as an Administrator to create SMB global mappings. We tell SF to create a user and add it to Administrators here -->
+  <Principals>
+    <Users>
+      <User Name="SetupAdminUser">
+        <MemberOf>
+          <SystemGroup Name="Administrators"/>
+        </MemberOf>
+      </User>
+    </Users>
+  </Principals>
+  
+</ApplicationManifest>
